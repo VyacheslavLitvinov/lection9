@@ -33,4 +33,33 @@
 
 import datetime
 
-# Здесь пишем код
+
+def func_log(file_log='log.txt'):
+    def decorator_func_log(func):
+        def wrapper(*args, **kwargs):
+            timestamp = datetime.datetime.now().strftime('%d.%m %H:%M:%S')
+            log_message = f"{func.__name__} вызвана {timestamp}\n"
+
+            with open(file_log, mode='a+', encoding='utf-8') as log_file:
+                log_file.write(log_message)
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator_func_log
+
+
+@func_log()
+def func1():
+    pass
+
+
+@func_log('func2.txt')
+def func2():
+    pass
+
+
+func1()
+func2()
+func1()
